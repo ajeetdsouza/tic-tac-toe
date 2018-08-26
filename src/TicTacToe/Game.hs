@@ -15,7 +15,7 @@ play board token player1 player2 = do
 
   play' board token player1 player2
     | Board.win board token' = putStrLn $ token' : " wins!"
-    | Board.movesLeft board == 0 = putStrLn "It's a draw!"
+    | Board.isFull board = putStrLn "It's a draw!"
     | otherwise = do
       board' <- Board.playMove board token <$> case player1 of
         Human -> User.readMove board token

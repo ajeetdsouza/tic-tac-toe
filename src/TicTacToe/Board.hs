@@ -49,8 +49,8 @@ showBoard board = unlines . map (unwords . map toList) $ board'
 
   board'   = upHeader : zipWith (:) ltHeader board
 
-movesLeft :: Board -> Int
-movesLeft = sum . map (length . elemIndices '-')
+isFull :: Board -> Bool
+isFull = not . any (elem '-')
 
 flipToken :: Char -> Char
 flipToken token = if token == 'x' then 'o' else 'x'
