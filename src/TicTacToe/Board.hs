@@ -1,7 +1,10 @@
 {-# LANGUAGE TupleSections #-}
 
-module App.Board where
+module TicTacToe.Board where
 
+import           Data.Char                      ( chr
+                                                , ord
+                                                )
 import           Data.List                      ( elemIndices
                                                 , transpose
                                                 )
@@ -24,8 +27,8 @@ win board token =
     ==     winSequence
   where winSequence = replicate 3 token
 
-move :: Board -> Char -> Move -> Board
-move board token (x, y) = board'
+playMove :: Board -> Char -> Move -> Board
+playMove board token (x, y) = board'
  where
   (rows1, row : rows2) = splitAt x board
   (cols1, _ : cols2  ) = splitAt y row
@@ -33,9 +36,14 @@ move board token (x, y) = board'
   row'                 = cols1 ++ [token] ++ cols2
   board'               = rows1 ++ [row'] ++ rows2
 
-display :: Board -> IO ()
-display board = putStrLn . unlines . map (unwords . map (: [])) $ board'
+showMove :: Move -> String
+showMove (x, y) = chr (ord 'a' + x) : show (1 + y)
+
+showBoard :: Board -> String
+showBoard board = unlines . map (unwords . map toList) $ board'
  where
+  toList   = (: [])
+
   upHeader = ['•', '1', '2', '3']
   ltHeader = ['a', 'b', 'c']
 

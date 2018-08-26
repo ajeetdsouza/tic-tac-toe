@@ -1,4 +1,4 @@
-module App.User where
+module TicTacToe.User where
 
 import           Data.Char                      ( toLower
                                                 , ord
@@ -10,14 +10,14 @@ import           System.IO                      ( hFlush
                                                 , stdout
                                                 )
 import           Text.Read                      ( readMaybe )
-import qualified App.Board                     as Board
+import qualified TicTacToe.Board               as Board
 
 invalidMsg :: String
 invalidMsg = "Invalid input. Please try again.\n"
 
 readMove :: Board.Board -> Char -> IO Board.Move
 readMove board token = do
-  putStr $ "Your move (" ++ [token] ++ "): "
+  putStr $ "Player move (" ++ [token] ++ "): "
   hFlush stdout
   input <- getLine
 

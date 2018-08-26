@@ -5,9 +5,9 @@ import           System.IO                      ( hFlush
                                                 )
 import           Text.Read                      ( readMaybe )
 
-import qualified App.Board                     as Board
-import qualified App.Game                      as Game
-import qualified App.User                      as User
+import qualified TicTacToe.Board               as Board
+import qualified TicTacToe.Game                as Game
+import qualified TicTacToe.User                as User
 
 main :: IO ()
 main = do

@@ -1,9 +1,9 @@
-module App.AI where
+module TicTacToe.AI where
 
 import           Data.List                      ( maximumBy )
 import           Data.Ord                       ( comparing )
 
-import qualified App.Board                     as Board
+import qualified TicTacToe.Board               as Board
 
 score :: Board.Board -> Char -> Bool -> Int -> Int
 score board token player depth
@@ -17,13 +17,13 @@ score board token player depth
 
   moves     = Board.possibleMoves board
   movesLeft = Board.movesLeft board
-  states    = map (Board.move board token) moves
+  states    = map (Board.playMove board token) moves
   scores    = map (\board' -> score board' token' player' depth') states
 
 getMove :: Board.Board -> Char -> Board.Move
-getMove board token = fst $ maximumBy (comparing snd) (zip moves scores)
+getMove board token = fst . maximumBy (comparing snd) $ zip moves scores
  where
   token' = Board.flipToken token
   moves  = Board.possibleMoves board
-  states = map (Board.move board token) moves
+  states = map (Board.playMove board token) moves
   scores = map (\board' -> score board' token' False 0) states
