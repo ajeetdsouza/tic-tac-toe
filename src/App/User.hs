@@ -28,8 +28,8 @@ readMove board token = do
       in  if not ('a' <= x && x <= 'c') || isNothing y
             then retry
             else
-              let x' = fromJust y - 1
-                  y' = ord x - ord 'a'
+              let x' = ord x - ord 'a'
+                  y' = fromJust y - 1
               in  if board !! x' !! y' == '-' then return (x', y') else retry
     else retry
  where

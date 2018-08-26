@@ -36,8 +36,8 @@ move board token (x, y) = board'
 display :: Board -> IO ()
 display board = putStrLn . unlines . map (unwords . map (: [])) $ board'
  where
-  upHeader = ['•', 'a', 'b', 'c']
-  ltHeader = ['1', '2', '3']
+  upHeader = ['•', '1', '2', '3']
+  ltHeader = ['a', 'b', 'c']
 
   board'   = upHeader : zipWith (:) ltHeader board
 
