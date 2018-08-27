@@ -1,28 +1,35 @@
 module TicTacToe.AI where
 
+import           Data.Either                    ( fromRight )
 import           Data.List                      ( maximumBy )
 import           Data.Ord                       ( comparing )
 
-import qualified TicTacToe.Board               as Board
+import           TicTacToe.Board               as Board
+import           TicTacToe.Move                as Move
+import           TicTacToe.Token               as Token
 
-score :: Board.Board -> Char -> Bool -> Int -> Int
-score board token player depth
-  | Board.win board token' = (if player then negate else id) (1 + length moves)
-  | Board.isFull board     = 0
-  | otherwise              = (if player then maximum else minimum) scores
+score :: Board.Board -> Token.Token -> Bool -> Int
+score board token player
+  | Board.isWinner board token' = (if player then negate else id)
+    (1 + length moves)
+  | Board.isFull board = 0
+  | otherwise = (if player then maximum else minimum) scores
  where
-  token'  = Board.flipToken token
+  token'  = Token.other token
   player' = not player
-  depth'  = depth + 1
 
-  moves   = Board.possibleMoves board
-  states  = map (Board.playMove board token) moves
-  scores  = map (\board' -> score board' token' player' depth') states
+  moves   = Board.validMoves board
+  states  = map
+    (fromRight (error "Invalid move generated") . Board.playMove board token)
+    moves
+  scores = map (\board' -> score board' token' player') states
 
-getMove :: Board.Board -> Char -> Board.Move
+getMove :: Board.Board -> Token.Token -> Move.Move
 getMove board token = fst . maximumBy (comparing snd) $ zip moves scores
  where
-  token' = Board.flipToken token
-  moves  = Board.possibleMoves board
-  states = map (Board.playMove board token) moves
-  scores = map (\board' -> score board' token' False 0) states
+  token' = Token.other token
+  moves  = Board.validMoves board
+  states = map
+    (fromRight (error "Invalid move generated") . Board.playMove board token)
+    moves
+  scores = map (\board' -> score board' token' False) states
