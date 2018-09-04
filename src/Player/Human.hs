@@ -1,4 +1,4 @@
-module TicTacToe.Player.Human
+module Player.Human
   ( getMove
   )
 where
@@ -11,9 +11,9 @@ import           System.IO                      ( hFlush
                                                 , stdout
                                                 )
 
-import           TicTacToe.Board
-import           TicTacToe.Move
-import           TicTacToe.Token
+import           Board
+import           Move
+import           Token
 
 getMove :: Board -> Token -> IO Move
 getMove (Board board) token = do

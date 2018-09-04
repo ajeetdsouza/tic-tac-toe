@@ -1,4 +1,4 @@
-module TicTacToe.Player.Minimax
+module Player.Minimax
   ( getMove
   )
 where
@@ -7,9 +7,9 @@ import           Data.List                      ( maximumBy )
 import           Data.Maybe                     ( fromJust )
 import           Data.Ord                       ( comparing )
 
-import           TicTacToe.Board
-import           TicTacToe.Move
-import           TicTacToe.Token
+import           Board
+import           Move
+import           Token
 
 score :: Board -> Token -> Bool -> Int
 score board token player
@@ -25,7 +25,8 @@ score board token player
   scores  = map (\board' -> score board' token' player') states
 
 getMove :: Board -> Token -> IO Move
-getMove board token = return . fst . maximumBy (comparing snd) $ zip moves scores
+getMove board token = return . fst . maximumBy (comparing snd) $ zip moves
+                                                                     scores
  where
   token' = flipToken token
 

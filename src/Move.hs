@@ -1,4 +1,4 @@
-module TicTacToe.Move where
+module Move where
 
 import           Data.Char                      ( chr
                                                 , ord

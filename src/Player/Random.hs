@@ -1,13 +1,13 @@
-module TicTacToe.Player.Random
+module Player.Random
   ( getMove
   )
 where
 
 import           System.Random                  ( randomRIO )
 
-import           TicTacToe.Board
-import           TicTacToe.Move
-import           TicTacToe.Token
+import           Board
+import           Move
+import           Token
 
 getMove :: Board -> Token -> IO Move
 getMove (Board board) token = do

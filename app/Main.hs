@@ -1,7 +1,7 @@
 module Main where
 
-import qualified TicTacToe.Game                as Game
-import qualified TicTacToe.Player              as Player
+import qualified Game
+import qualified Player
 
 main :: IO ()
 main = Game.new playerOptions

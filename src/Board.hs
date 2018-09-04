@@ -1,4 +1,4 @@
-module TicTacToe.Board where
+module Board where
 
 import           Data.List                      ( elemIndices
                                                 , transpose
@@ -7,8 +7,8 @@ import           Data.Maybe                     ( isJust
                                                 , isNothing
                                                 )
 
-import TicTacToe.Move
-import TicTacToe.Token
+import           Move
+import           Token
 
 newtype Board = Board [[Maybe Token]]
 

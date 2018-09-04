@@ -1,5 +1,5 @@
-module TicTacToe.Game
-  ( TicTacToe.Game.new
+module Game
+  ( Game.new
   )
 where
 
@@ -9,10 +9,10 @@ import           System.IO                      ( hFlush
                                                 , stdout
                                                 )
 import           Text.Read                      ( readMaybe )
-import           TicTacToe.Board               as Board
-import           TicTacToe.Move
-import           TicTacToe.Player              as Player
-import           TicTacToe.Token
+import           Board
+import           Move
+import           Player
+import           Token
 
 new :: [Player] -> IO ()
 new playerOptions = do

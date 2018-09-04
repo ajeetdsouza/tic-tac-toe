@@ -1,4 +1,4 @@
-module TicTacToe.Token where
+module Token where
 
 data Token = X | O deriving Eq
 
