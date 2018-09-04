@@ -1,87 +1,69 @@
-module TicTacToe.Game where
+module TicTacToe.Game
+  ( TicTacToe.Game.new
+  )
+where
 
-import           Data.Either                    ( fromRight )
+import           Control.Monad                  ( forM_ )
+import           Data.Maybe                     ( fromMaybe )
 import           System.IO                      ( hFlush
                                                 , stdout
                                                 )
 import           Text.Read                      ( readMaybe )
-
-import           TicTacToe.AI                  as AI
 import           TicTacToe.Board               as Board
-import           TicTacToe.Move                as Move
-import           TicTacToe.Token               as Token
+import           TicTacToe.Move
+import           TicTacToe.Player              as Player
+import           TicTacToe.Token
 
-data Player = AI | Human deriving (Eq, Show)
-
-msgInvalid :: String
-msgInvalid = "Invalid input, please try again."
-
-msgPrompt :: String
-msgPrompt = ">> "
-
-new :: IO ()
-new = do
-  putStrLn $ "Player " ++ show Token.X ++ ": "
-  player1 <- getPlayer
-  putStrLn ""
-
-  putStrLn $ "Player " ++ show Token.O ++ ": "
-  player2 <- getPlayer
-  putStrLn ""
+new :: [Player] -> IO ()
+new playerOptions = do
+  player1 <- getPlayer X playerOptions
+  player2 <- getPlayer O playerOptions
 
   let board = Board.new
+  print board
 
-  turn board player1 player2 Token.X
- where
-  getPlayer = do
-    putStr . unlines $ ["1. " ++ show AI, "2. " ++ show Human]
-    putStr msgPrompt
-    hFlush stdout
+  winner <- playTurn X board player1 player2
+  putStrLn $ case winner of
+    Nothing    -> "It's a draw!"
+    Just token -> "Player " ++ show token ++ " wins!"
 
-    input <- getLine
-    case readMaybe input :: Maybe Int of
-      Just 1 -> return AI
-      Just 2 -> return Human
-      _      -> do
-        putStrLn msgInvalid
-        getPlayer
-
-aiPlayMove :: Board.Board -> Token.Token -> IO Board.Board
-aiPlayMove board token = do
+playTurn :: Token -> Board -> Player -> Player -> IO (Maybe Token)
+playTurn token board player1 player2 = do
+  move <- getMove player1 board token
   putStrLn $ "Player " ++ show token ++ " move: " ++ show move
-  return
-    . fromRight (error "Invalid move generated")
-    . Board.playMove board token
-    $ move
-  where move = AI.getMove board token
 
-humanPlayMove :: Board.Board -> Token.Token -> IO Board.Board
-humanPlayMove board token = do
-  putStr $ "Player " ++ show token ++ " move: "
+  let board' = fromMaybe (error "getMove returned an illegal move!")
+                         (Board.playMove board token move)
+  print board'
+
+  if Board.isWinner board' token
+    then return $ Just token
+    else if Board.isFull board'
+      then return Nothing
+      else playTurn (flipToken token) board' player2 player1
+
+getPlayer :: Token -> [Player] -> IO Player
+getPlayer token playerOptions = do
+  putStrLn $ "Player " ++ show token ++ ": "
+  forM_ (zip [1 ..] playerOptions)
+    $ \(idx, player) -> putStrLn $ show idx ++ ". " ++ show player
+
+  putStr ">> "
   hFlush stdout
 
-  move <- readMaybe <$> getLine :: IO (Maybe Move.Move)
-  case move of
-    Nothing    -> retry
-    Just move' -> case Board.playMove board token move' of
-      Left  _      -> retry
-      Right board' -> return board'
- where
-  retry = do
-    putStrLn msgInvalid
-    humanPlayMove board token
+  input <- getLine
+  putStrLn ""
 
-turn :: Board.Board -> Player -> Player -> Token.Token -> IO ()
-turn board player1 player2 token = do
-  print board
-  turn'
+  case parseInput input of
+    Nothing     -> retry
+    Just player -> return player
  where
-  token' = Token.other token
-  turn'
-    | Board.isWinner board token' = putStrLn $ show token' ++ " wins!"
-    | Board.isFull board = putStrLn "It's a draw!"
-    | otherwise = do
-      board' <- case player1 of
-        Human -> humanPlayMove board token
-        AI    -> aiPlayMove board token
-      turn board' player2 player1 token'
+  parseInput input = do
+    n <- flip (-) 1 <$> readMaybe input
+    if 0 <= n && n < length playerOptions
+      then return $ playerOptions !! n
+      else Nothing
+
+  retry = do
+    putStrLn "Invalid input, please try again."
+    getPlayer token playerOptions
