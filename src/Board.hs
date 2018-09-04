@@ -8,20 +8,21 @@ import           Data.Maybe                     ( isJust
                                                 )
 
 import           Move
+import           Pretty
 import           Token
 
 newtype Board = Board [[Maybe Token]]
 
-instance Show Board where
-  show (Board board) = unlines . map unwords $ board'
+instance Pretty Board where
+  pretty (Board board) = unlines . map unwords $ board'
    where
-    showToken (Just token) = show token
-    showToken Nothing = "-"
+    prettyToken (Just token) = pretty token
+    prettyToken Nothing = "-"
 
     rowHead = ["a", "b", "c"]
     colHead = ["•", "1", "2", "3"]
 
-    board' = colHead : zipWith (:) rowHead (map (map showToken) board)
+    board' = colHead : zipWith (:) rowHead (map (map prettyToken) board)
 
 new :: Board
 new = Board . replicate 3 . replicate 3 $ Nothing

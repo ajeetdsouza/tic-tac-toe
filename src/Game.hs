@@ -10,8 +10,8 @@ import           System.IO                      ( hFlush
                                                 )
 import           Text.Read                      ( readMaybe )
 import           Board
-import           Move
 import           Player
+import           Pretty
 import           Token
 
 new :: [Player] -> IO ()
@@ -20,21 +20,21 @@ new playerOptions = do
   player2 <- getPlayer O playerOptions
 
   let board = Board.new
-  print board
+  pprint board
 
   winner <- playTurn X board player1 player2
   putStrLn $ case winner of
     Nothing    -> "It's a draw!"
-    Just token -> "Player " ++ show token ++ " wins!"
+    Just token -> "Player " ++ pretty token ++ " wins!"
 
 playTurn :: Token -> Board -> Player -> Player -> IO (Maybe Token)
 playTurn token board player1 player2 = do
   move <- getMove player1 board token
-  putStrLn $ "Player " ++ show token ++ " move: " ++ show move
+  putStrLn $ "Player " ++ pretty token ++ " move: " ++ pretty move
 
   let board' = fromMaybe (error "getMove returned an illegal move!")
                          (Board.playMove board token move)
-  print board'
+  pprint board'
 
   if Board.isWinner board' token
     then return $ Just token
@@ -44,9 +44,9 @@ playTurn token board player1 player2 = do
 
 getPlayer :: Token -> [Player] -> IO Player
 getPlayer token playerOptions = do
-  putStrLn $ "Player " ++ show token ++ ": "
+  putStrLn $ "Player " ++ pretty token ++ ": "
   forM_ (zip [1 ..] playerOptions)
-    $ \(idx, player) -> putStrLn $ show idx ++ ". " ++ show player
+    $ \(idx, player) -> putStrLn $ show idx ++ ". " ++ pretty player
 
   putStr ">> "
   hFlush stdout

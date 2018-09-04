@@ -1,10 +1,12 @@
 module Token where
 
-data Token = X | O deriving Eq
+import           Pretty
 
-instance Show Token where
-  show X = "×"
-  show O = "○"
+data Token = X | O deriving (Eq, Show)
+
+instance Pretty Token where
+  pretty X = "×"
+  pretty O = "○"
 
 flipToken X = O
 flipToken O = X

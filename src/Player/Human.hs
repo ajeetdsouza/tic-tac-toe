@@ -13,11 +13,12 @@ import           System.IO                      ( hFlush
 
 import           Board
 import           Move
+import           Pretty
 import           Token
 
 getMove :: Board -> Token -> IO Move
 getMove (Board board) token = do
-  putStr $ "Enter your move (" ++ show token ++ "): "
+  putStr $ "Enter your move (" ++ pretty token ++ "): "
   hFlush stdout
   input <- getLine
   if length input < 2 then retry else toMove input
