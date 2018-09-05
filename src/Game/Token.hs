@@ -1,4 +1,4 @@
-module Token where
+module Game.Token where
 
 import           Pretty
 

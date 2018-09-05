@@ -1,8 +1,9 @@
-module Move where
+module Game.Move where
 
 import           Data.Char                      ( chr
                                                 , ord
                                                 )
+
 import           Pretty
 
 newtype Move = Move (Int, Int) deriving Show

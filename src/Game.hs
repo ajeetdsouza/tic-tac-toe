@@ -9,17 +9,18 @@ import           System.IO                      ( hFlush
                                                 , stdout
                                                 )
 import           Text.Read                      ( readMaybe )
-import           Board
+
+import           Game.Board
 import           Player
+import           Game.Token
 import           Pretty
-import           Token
 
 new :: [Player] -> IO ()
 new playerOptions = do
   player1 <- getPlayer X playerOptions
   player2 <- getPlayer O playerOptions
 
-  let board = Board.new
+  let board = Game.Board.new
   pprint board
 
   winner <- playTurn X board player1 player2
@@ -33,12 +34,12 @@ playTurn token board player1 player2 = do
   putStrLn $ "Player " ++ pretty token ++ " move: " ++ pretty move
 
   let board' = fromMaybe (error "getMove returned an illegal move!")
-                         (Board.playMove board token move)
+                         (playMove board token move)
   pprint board'
 
-  if Board.isWinner board' token
+  if isWinner board' token
     then return $ Just token
-    else if Board.isFull board'
+    else if isFull board'
       then return Nothing
       else playTurn (flipToken token) board' player2 player1
 

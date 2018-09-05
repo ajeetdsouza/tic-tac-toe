@@ -5,9 +5,9 @@ where
 
 import           System.Random                  ( randomRIO )
 
-import           Board
-import           Move
-import           Token
+import           Game.Board
+import           Game.Move
+import           Game.Token
 
 getMove :: Board -> Token -> IO Move
 getMove (Board board) token = do

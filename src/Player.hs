@@ -1,8 +1,8 @@
 module Player where
 
-import           Board
-import           Move
-import           Token
+import           Game.Board
+import           Game.Move
+import           Game.Token
 import qualified Player.Human
 import qualified Player.Minimax
 import qualified Player.Random

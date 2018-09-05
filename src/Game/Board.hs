@@ -1,4 +1,4 @@
-module Board where
+module Game.Board where
 
 import           Data.List                      ( elemIndices
                                                 , transpose
@@ -7,9 +7,9 @@ import           Data.Maybe                     ( isJust
                                                 , isNothing
                                                 )
 
-import           Move
+import           Game.Move
+import           Game.Token
 import           Pretty
-import           Token
 
 newtype Board = Board [[Maybe Token]]
 

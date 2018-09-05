@@ -7,9 +7,9 @@ import           Data.List                      ( maximumBy )
 import           Data.Maybe                     ( fromJust )
 import           Data.Ord                       ( comparing )
 
-import           Board
-import           Move
-import           Token
+import           Game.Board
+import           Game.Move
+import           Game.Token
 
 score :: Board -> Token -> Bool -> Int
 score board token player

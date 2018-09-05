@@ -11,10 +11,10 @@ import           System.IO                      ( hFlush
                                                 , stdout
                                                 )
 
-import           Board
-import           Move
+import           Game.Board
+import           Game.Move
+import           Game.Token
 import           Pretty
-import           Token
 
 getMove :: Board -> Token -> IO Move
 getMove (Board board) token = do
